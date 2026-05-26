@@ -1,23 +1,24 @@
 📄 Ask My PDFs
+🧠 Overview
 
-Ask My PDFs is a Django-based Retrieval-Augmented Generation (RAG) system that allows users to upload and interact with large collections of PDFs and documents using natural language.
+Ask My PDFs is a Django-based Retrieval-Augmented Generation (RAG) system that enables users to upload and interact with large collections of PDFs and documents using natural language.
 
-Unlike traditional LLMs that rely only on pre-trained knowledge, this system grounds responses in user-provided documents using retrieval-based context injection.
+Unlike traditional LLMs that rely only on pre-trained knowledge, this system grounds responses in user-provided documents using retrieval-based context.
 
-It processes documents through an ETL pipeline, chunks and indexes them in Elasticsearch, retrieves relevant content at query time, and uses LLaMA 3.1 (via Groq API) to generate accurate, context-aware responses.
+It processes documents through an ETL pipeline, chunks and indexes them using Elasticsearch, retrieves relevant content at query time, and uses LLaMA 3.1 (via Groq API) to generate context-aware responses.
 
-This project demonstrates a practical implementation of modern GenAI and RAG architectures using Django, Elasticsearch, and LLM inference in a unified workflow.
+This project demonstrates a practical implementation of modern GenAI and RAG architecture using Django, Elasticsearch, and LLM inference.
 
-🚀 Features
-📚 Multi-document PDF upload support
-💬 Natural language document querying
-⚙️ ETL pipeline for document processing
-🔎 Elasticsearch-based indexing and retrieval
-🧠 Context-aware LLM responses (Groq + LLaMA 3.1)
-💾 Session-based chat history
-🎨 Modern Django + Tailwind CSS UI
-📂 Multi-file upload handling
-🔗 RAG-based grounded answering system
+✨ Features
+Multi-document PDF upload support
+Natural language document querying
+ETL pipeline for document processing
+Elasticsearch-based indexing and retrieval
+Context-aware LLM responses (Groq + LLaMA 3.1)
+Session-based chat history
+Modern Django + Tailwind UI
+Multi-file upload handling
+RAG-based grounded answering
 🧰 Tech Stack
 Python
 Django
@@ -29,10 +30,10 @@ Tailwind CSS
 Docker
 ETL Pipelines
 Retrieval-Augmented Generation (RAG)
-🏗️ System Architecture
+🏗️ Architecture
 User Uploads PDFs
         ↓
-Document Extraction (ETL)
+ETL Document Extraction
         ↓
 Text Chunking
         ↓
@@ -44,61 +45,48 @@ Relevant Chunk Retrieval
         ↓
 LLaMA 3.1 via Groq
         ↓
-Grounded AI Response
+Grounded Response
 ⚙️ Installation & Setup
-1️⃣ Clone the repository
-git clone <your-repo-url>
+1. Clone Repository
+git clone <repo-url>
 cd askMyPDF
-2️⃣ Create virtual environment
+2. Create Virtual Environment
 python -m venv venv
 
-Activate (Windows PowerShell):
+Activate:
 
 .\venv\Scripts\Activate.ps1
-
-If activation fails, reinstall Python with “Add to PATH” and PowerShell support enabled.
-
-3️⃣ Install dependencies
+3. Install Dependencies
 pip install django pdfplumber pandas langchain sentence-transformers streamlit groq python-dotenv python-docx elasticsearch==8.11.0 requests
-4️⃣ Configure environment variables
+4. Environment Variables
 
-Create a .env file in the project root:
+Create a .env file:
 
 GROQ_API_KEY=your_groq_api_key
-5️⃣ Start Elasticsearch (Docker)
+5. Run Elasticsearch (Docker)
+docker run -p 9200:9200 -e "discovery.type=single-node" -e "xpack.security.enabled=false" elasticsearch:8.11.0
 
-Make sure Docker Desktop is running, then:
-
-docker run -p 9200:9200 \
-  -e "discovery.type=single-node" \
-  -e "xpack.security.enabled=false" \
-  elasticsearch:8.11.0
-
-Elasticsearch will be available at:
-
-http://localhost:9200
-
-Check indexed data:
+Check:
 
 http://localhost:9200/docs/_search?pretty
-6️⃣ Configure Django media settings
+6. Django Settings
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-7️⃣ Run the server
+7. Run Server
 python manage.py runserver
 
 Open:
 
 http://127.0.0.1:8000/
-🔁 Example Workflow
-User uploads PDFs/documents
-ETL pipeline extracts text
-Text is chunked and indexed into Elasticsearch
-User asks a question
-Relevant chunks are retrieved
-Context is sent to LLaMA 3.1 via Groq API
-Model generates grounded response
+🔁 Workflow
+Upload PDFs
+→ ETL Processing
+→ Chunking
+→ Elasticsearch Indexing
+→ Query Input
+→ Retrieval of Relevant Chunks
+→ LLaMA 3.1 Response Generation
 📌 Notes
-This is a demo RAG system, not a production-grade deployment
-Designed for educational and portfolio purposes
-Performance depends on Elasticsearch indexing and chunk quality
+This is a demo RAG system
+Focuses on grounding LLM responses in user documents
+Not a production deployment
