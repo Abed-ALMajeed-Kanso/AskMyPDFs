@@ -1,0 +1,39 @@
+# environment variables
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+.venv/
+
+# Django
+db.sqlite3
+media/
+staticfiles/
+
+# Elasticsearch / Chroma / vector db
+chroma_db/
+*.db
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Temporary files
+temp/
+tmp/

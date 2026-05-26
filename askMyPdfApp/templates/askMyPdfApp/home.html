@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ask My PDFs</title>
+     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📄</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-950 text-gray-100 min-h-screen flex flex-col">
+
+<header class="p-4 border-b border-gray-800 flex items-center justify-between">
+    <div class="flex gap-2">
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="clear_chat" value="1">
+            <button class="bg-red-600 hover:bg-red-700 px-3 py-1 rounded-lg text-sm transition">
+                Clear Chat History
+            </button>
+        </form>
+
+        <a href="{% url 'manage_files' %}" class="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded-lg text-sm transition">Modify Files</a>
+    </div>
+
+    <div class="text-center flex-1">
+        <h1 class="text-2xl font-bold">Ask My PDFs</h1>
+        <p class="text-gray-400 text-sm">
+            Upload documents and chat with your knowledge base
+        </p>
+        <p class="text-yellow-400 text-xs mt-2">
+            Recommended limit: up to 40,000 full text pages (maximum 50 MB)
+        </p>
+    </div>
+
+    <div class="w-[120px]"></div>
+</header>
+
+<main class="flex-1 flex flex-col items-center p-6 space-y-6">
+    <div class="w-full max-w-2xl bg-gray-900 p-4 rounded-2xl shadow-lg border border-gray-800">
+        <h2 class="text-lg font-semibold mb-3">Upload Documents</h2>
+
+        <form id="uploadForm" method="post" enctype="multipart/form-data" class="space-y-3">
+            {% csrf_token %}
+            <div class="flex gap-3 items-start">
+                <div class="flex-1 min-w-0">
+                    <input id="fileInput" name="file" type="file" multiple accept=".pdf,.docx,.txt" class="w-full bg-gray-800 text-white px-4 py-2 rounded-xl outline-none" />
+                </div>
+                <button type="submit" id="uploadBtn" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-xl transition self-start">
+                    Upload
+                </button>
+            </div>
+            <div>
+                <p id="fileInfo" class="text-sm text-yellow-400 mt-2 break-words"></p>
+                {% if upload_error %}
+                    <p class="text-red-400 text-sm mt-2">{{ upload_error }}</p>
+                {% endif %}
+                {% if upload_success %}
+                    <p class="text-green-400 text-sm mt-2">{{ upload_success }}</p>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+
+    <div class="w-full max-w-2xl flex flex-col space-y-4">
+    {% for item in chat %}
+    <div class="flex justify-end">
+        <div class="bg-blue-600 text-white p-4 rounded-2xl max-w-xl shadow">
+            <p class="font-semibold mb-1">You</p>
+            <p>{{ item.question }}</p>
+        </div>
+    </div>
+
+    <div class="flex justify-start">
+        <div class="bg-gray-900 border border-gray-800 p-4 rounded-2xl max-w-xl shadow">
+            <p class="text-green-400 font-semibold mb-1">My PDFs</p>
+            <p class="text-gray-300 leading-relaxed">
+                {{ item.answer }}
+            </p>
+        </div>
+    </div>
+    {% endfor %}
+
+        <div id="chat-box" class="bg-gray-900 border border-gray-800 p-4 rounded-2xl shadow">
+            <form method="post" class="flex gap-3">
+                {% csrf_token %}
+                <input
+                    type="text"
+                    name="question"
+                    placeholder="Ask something from your PDFs..."
+                    class="flex-1 bg-gray-800 text-white px-4 py-2 rounded-xl outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-xl transition">
+                    Ask
+                </button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<footer class="text-center text-gray-500 text-xs p-4 border-t border-gray-800">
+    AskMyPdfs do not know everything. Search for what matters.
+</footer>
+
+<script>
+
+    window.addEventListener("load", () => {
+        const savedScroll = sessionStorage.getItem("chat-scroll");
+
+        if (savedScroll !== null) {
+            window.scrollTo(0, parseInt(savedScroll, 10));
+        } else {
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+    });
+
+    window.addEventListener("beforeunload", () => {
+        sessionStorage.setItem("chat-scroll", window.scrollY);
+    });
+
+
+    (function () {
+        const MAX_FILES = 30;
+        const MAX_TOTAL = 55 * 1024 * 1024;
+
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const uploadForm = document.getElementById('uploadForm');
+
+        function readableMB(bytes) {
+            return (bytes / 1024 / 1024).toFixed(2);
+        }
+
+        function updateInfo() {
+            const files = fileInput.files || [];
+            let total = 0;
+            for (let i = 0; i < files.length; i++) total += files[i].size;
+
+            fileInfo.textContent = files.length + ' file(s), total ' + readableMB(total) + ' MB';
+
+            if (files.length > MAX_FILES || total > MAX_TOTAL) {
+                fileInfo.classList.remove('text-yellow-400');
+                fileInfo.classList.add('text-red-400');
+                uploadBtn.disabled = true;
+            } else {
+                fileInfo.classList.remove('text-red-400');
+                fileInfo.classList.add('text-yellow-400');
+                uploadBtn.disabled = false;
+            }
+        }
+
+        if (fileInput) {
+            fileInput.addEventListener('change', updateInfo);
+        }
+
+        if (uploadForm) {
+            uploadForm.addEventListener('submit', function (e) {
+                const files = fileInput.files || [];
+                let total = 0;
+                for (let i = 0; i < files.length; i++) total += files[i].size;
+
+                if (files.length === 0) {
+                    e.preventDefault();
+                    alert('Please select at least one PDF to upload.');
+                    return;
+                }
+
+                if (files.length > MAX_FILES) {
+                    e.preventDefault();
+                    alert('Upload limit exceeded: Maximum ' + MAX_FILES + ' files.');
+                    return;
+                }
+
+                if (total > MAX_TOTAL) {
+                    e.preventDefault();
+                    alert('Total upload size exceeds 55 MB. Please upload fewer or smaller files.');
+                    return;
+                }
+            });
+        }
+    })();
+</script>
+
+</body>
+</html>
