@@ -1,5 +1,6 @@
-Ask My PDFs
-Overview
+# Ask My PDFs
+
+## Overview
 
 Ask My PDFs is a Django-based Retrieval-Augmented Generation (RAG) system that enables users to upload and interact with large collections of PDF and document files using natural language.
 
@@ -9,45 +10,54 @@ Documents are processed using an ETL workflow, chunked, and indexed into Elastic
 
 This project demonstrates a practical implementation of modern GenAI systems combining Django backend development, document processing, search infrastructure, and LLM inference in a unified RAG architecture.
 
-Features
-Multi-document PDF upload support
-Natural language document querying
-ETL pipeline for document processing
-Elasticsearch-based indexing and retrieval
-Context-aware LLM responses using Groq (LLaMA 3.1)
-Session-based chat history
-Modern TailwindCSS frontend
-Multi-file upload support
-RAG-based grounded answering
-Tech Stack
-Python
-Django
-Elasticsearch
-Groq API
-LLaMA 3.1
-pdfplumber
-TailwindCSS
-Docker
-ETL pipelines
-Retrieval-Augmented Generation (RAG)
-Architecture
-User Uploads PDFs
-↓
-Document Extraction (ETL)
-↓
-Text Chunking
-↓
-Elasticsearch Indexing
-↓
-User Question
-↓
-Relevant Chunk Retrieval
-↓
-LLaMA 3.1 (Groq)
-↓
-Grounded AI Response
-Installation & Setup
-1. Clone Repository
+## Features
+
+- Multi-document PDF upload support  
+- Natural language document querying  
+- ETL pipeline for document processing  
+- Elasticsearch-based indexing and retrieval  
+- Context-aware LLM responses using Groq (LLaMA 3.1)  
+- Session-based chat history  
+- Modern TailwindCSS frontend  
+- Multi-file upload support  
+- RAG-based grounded answering  
+
+## Tech Stack
+
+- Python  
+- Django  
+- Elasticsearch  
+- Groq API  
+- LLaMA 3.1  
+- pdfplumber  
+- TailwindCSS  
+- Docker  
+- ETL pipelines  
+- Retrieval-Augmented Generation (RAG)  
+
+## Architecture
+
+User Uploads PDFs  
+↓  
+Document Extraction (ETL)  
+↓  
+Text Chunking  
+↓  
+Elasticsearch Indexing  
+↓  
+User Question  
+↓  
+Relevant Chunk Retrieval  
+↓  
+LLaMA 3.1 (Groq)  
+↓  
+Grounded AI Response  
+
+## Installation & Setup
+
+### 1. Clone Repository
+
+```bash
 git clone https://github.com/<your-username>/AskMyPDFs.git
 cd AskMyPDFs
 2. Create Virtual Environment
@@ -79,6 +89,7 @@ Open:
 
 http://127.0.0.1:8000/
 Workflow
+
 Upload PDFs
 ↓
 ETL Processing
@@ -94,11 +105,15 @@ Relevant Retrieval
 LLM (Groq + LLaMA 3.1)
 ↓
 Final Answer
-Notes
+
+```
+
+## Notes
 Demo RAG system (not production-ready)
 Uses Elasticsearch instead of vector database
 Session-based chat history
 Groq used for fast LLM inference
-Summary
+
+## Summary
 
 A lightweight end-to-end RAG system built with Django, Elasticsearch, and LLMs, focused on grounded document-based question answering over large-scale user-provided data.
