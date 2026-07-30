@@ -53,61 +53,6 @@ LLaMA 3.1 (Groq)
 ↓  
 Grounded AI Response  
 
-## Installation & Setup
-
-### 1. Clone Repository
-
-```bash
-git clone https://github.com/<your-username>/AskMyPDFs.git
-cd AskMyPDFs
-2. Create Virtual Environment
-python -m venv venv
-
-Activate (Windows PowerShell):
-
-.\venv\Scripts\Activate.ps1
-3. Install Dependencies
-pip install django pdfplumber pandas langchain chromadb sentence-transformers streamlit groq python-dotenv python-docx elasticsearch==8.11.0 requests
-4. Environment Variables
-
-Create a .env file in the root directory:
-
-GROQ_API_KEY=your_groq_api_key
-5. Run Elasticsearch (Docker)
-docker run -p 9200:9200 -e "discovery.type=single-node" -e "xpack.security.enabled=false" elasticsearch:8.11.0
-
-Check:
-
-http://localhost:9200/docs/_search?pretty
-6. Django Settings
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-7. Run Server
-python manage.py runserver
-
-Open:
-
-http://127.0.0.1:8000/
-Workflow
-
-Upload PDFs
-↓
-ETL Processing
-↓
-Chunking
-↓
-Elasticsearch Indexing
-↓
-User Query
-↓
-Relevant Retrieval
-↓
-LLM (Groq + LLaMA 3.1)
-↓
-Final Answer
-
-```
-
 ## Notes
 Demo RAG system (not production-ready)
 Uses Elasticsearch instead of vector database
